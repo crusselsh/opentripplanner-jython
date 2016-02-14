@@ -1,7 +1,7 @@
 from threading import Thread, Lock
 from time import sleep
 
-from org.opentripplanner.routing.algorithm import EarliestArrivalSPTService
+from org.opentripplanner.routing.algorithm import EarliestArrivalSearch
 from org.opentripplanner.analyst import TimeSurface
 
 from opentripplanner import Graph
@@ -82,7 +82,7 @@ class BatchProcessor:
 
         def processOrigins(nextOrigin, results, routingRequest, graph, origins, oLen, startLock, outputLock):
             # create an spt service
-            sptService = EarliestArrivalSPTService()
+            sptService = EarliestArrivalSearch()
             sptService.maxDuration = self.cutoffMinutes * 60
 
             while True:
@@ -103,10 +103,17 @@ class BatchProcessor:
                 options.batch = True
                 orig = origins[origin]
                 options.setFrom(orig.getLat(), orig.getLon())
-                options.setGraph(graph)
+                
+                # CH: added to skip unlocated points
+                try:
+                    options.setGraph(graph)
 
-                # now we should not need a lock anymore
-                startLock.release()
+                    # now we should not need a lock anymore
+                    startLock.release()
+                except:
+                    print 'passing exception in BatchProcessor'
+                    startLock.release()
+                    continue
 
                 spt = sptService.getShortestPathTree(options._routingRequest)
                 tsurf = TimeSurface(spt)

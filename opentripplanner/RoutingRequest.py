@@ -24,7 +24,7 @@ class RoutingRequest:
 
     def setGraph (self, graph):
         self._routingRequest.setRoutingContext(graph._graph)
-
+        
     def setFrom (self, lat, lon):
         setattr(self._routingRequest, 'from', GenericLocation(lat, lon))
 

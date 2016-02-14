@@ -6,7 +6,7 @@ from org.opentripplanner.routing.graph.Graph import LoadLevel
 class Graph:
     """Represents an OpenTripPlanner graph"""
 
-    def __init__(self, graph):
+    def __init__(self, graph, rID):
         """
         Read the graph at the location specified by Graph.
         This function is also used internally to wrap an org.opentripplanner.routing.Graph, and
@@ -24,12 +24,15 @@ class Graph:
             else:
                 # must be a file
                 path = os.path.dirname(graph)
+                
+            # print 'path is %s | graph is %s | rID is %s' % (path, graph, rID)
 
-            isgs = InputStreamGraphSource.newFileGraphSource(None, File(path), LoadLevel.FULL)
-            self._graph = isgs.getGraph()
+            isgs = InputStreamGraphSource.newFileGraphSource(rID, File(path), LoadLevel.FULL)
+            isgs.reload(True, False)
+            self._graph = isgs.router.graph
 
             # workaround for not having any graph service
-            self._graph.routerId = hex(id(self))
+            # self._graph.routerId = hex(id(self))
 
         else:
             # We're wrapping a graph
