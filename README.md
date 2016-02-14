@@ -4,6 +4,9 @@ This is a library to allow the use of the open-source [OpenTripPlanner](http://w
 
 The software currently provides bindings only for accessibility analysis capabilities, and not general journey planning. However, it is architected in such a way that it could be made more general in the future.
 
+## BELOW TO BE UPDATED - testing updates for (a) using v0.19 of OTP and (b) larger datasets
+OTP's [Scripting API](http://opentripplanner.readthedocs.org/en/latest/Scripting/) may do the job better but I'm interested in testing out accessing the lower level Java packages directly.
+
 ## Example
 
 This finds the travel time to the closest high school from every block in Chicago (actually, to be pedantic, it finds the travel time from the closest high school to every block in the afternoon; there are technical limitiations that don't allow us to the former in an efficient matter, but these should be resolved soon).
